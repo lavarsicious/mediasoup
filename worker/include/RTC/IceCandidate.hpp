@@ -31,6 +31,7 @@ namespace RTC
 		};
 
 	public:
+		IceCandidate(RTC::UdpSocket* udpSocket, uint32_t priority, const std::string &ip);
 		IceCandidate(RTC::UdpSocket* udpSocket, uint32_t priority);
 		IceCandidate(RTC::TcpServer* tcpServer, uint32_t priority);
 
@@ -40,8 +41,8 @@ namespace RTC
 		// Others.
 		std::string foundation;
 		uint32_t priority{ 0 };
-		int family{ 0 };
 		std::string ip;
+		int family{ 0 };
 		Protocol protocol;
 		uint16_t port{ 0 };
 		CandidateType type;
