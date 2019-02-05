@@ -62,39 +62,39 @@ namespace RTC
 		{
 			if (Settings::configuration.hasAnnouncedLocalIPv4)
 			{
-                uint16_t localPreference = IceCandidateDefaultLocalPriority;
+				uint16_t localPreference = IceCandidateDefaultLocalPriority;
 
-                if (options.preferIPv4)
-                    localPreference += IceCandidateLocalPriorityPreferFamilyIncrement;
-                if (options.preferUdp)
-                    localPreference += IceCandidateLocalPriorityPreferProtocolIncrement;
+				if (options.preferIPv4)
+					localPreference += IceCandidateLocalPriorityPreferFamilyIncrement;
+				if (options.preferUdp)
+					localPreference += IceCandidateLocalPriorityPreferProtocolIncrement;
 
-    			uint32_t priority = generateIceCandidatePriority(localPreference) - 1;
+				uint32_t priority = generateIceCandidatePriority(localPreference) + 1000;
 
-                try
-                {
-                    auto* udpSocket = new RTC::UdpSocket(this, AF_INET);
-                    RTC::IceCandidate iceCandidate(udpSocket, priority, Settings::configuration.rtcAnnouncedLocalIPv4);
+				try
+				{
+					auto* udpSocket = new RTC::UdpSocket(this, AF_INET);
+					RTC::IceCandidate iceCandidate(udpSocket, priority, Settings::configuration.rtcAnnouncedLocalIPv4);
 
-                    this->udpSockets.push_back(udpSocket);
-                    this->iceLocalCandidates.push_back(iceCandidate);
-                }
-                catch (const MediaSoupError& error)
-                {
-                    MS_ERROR("error adding IPv4 UDP socket: %s", error.what());
-                }
-            }
+					this->udpSockets.push_back(udpSocket);
+					this->iceLocalCandidates.push_back(iceCandidate);
+				}
+				catch (const MediaSoupError& error)
+				{
+					MS_ERROR("error adding IPv4 UDP socket: %s", error.what());
+				}
+			}
 
-			try
+	    		try
 			{
 			    uint16_t localPreference = IceCandidateDefaultLocalPriority;
 
-                if (options.preferIPv4)
-                    localPreference += IceCandidateLocalPriorityPreferFamilyIncrement;
-                if (options.preferUdp)
-                    localPreference += IceCandidateLocalPriorityPreferProtocolIncrement;
+				if (options.preferIPv4)
+					localPreference += IceCandidateLocalPriorityPreferFamilyIncrement;
+				if (options.preferUdp)
+					localPreference += IceCandidateLocalPriorityPreferProtocolIncrement;
 
-    			uint32_t priority = generateIceCandidatePriority(localPreference);
+				uint32_t priority = generateIceCandidatePriority(localPreference);
 
 				auto* udpSocket = new RTC::UdpSocket(this, AF_INET);
 				RTC::IceCandidate iceCandidate(udpSocket, priority);
