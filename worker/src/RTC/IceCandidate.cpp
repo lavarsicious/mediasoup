@@ -8,6 +8,12 @@ namespace RTC
 {
 	/* Instance methods. */
 
+	IceCandidate::IceCandidate(RTC::UdpSocket* udpSocket, uint32_t priority, const std::string &ip)
+	  : foundation("udpcandidate"), priority(priority), ip(ip), family(udpSocket->GetLocalFamily()),
+	    protocol(Protocol::UDP), port(udpSocket->GetLocalPort()), type(CandidateType::HOST)
+	{
+	}
+
 	IceCandidate::IceCandidate(RTC::UdpSocket* udpSocket, uint32_t priority)
 	  : foundation("udpcandidate"), priority(priority), family(udpSocket->GetLocalFamily()),
 	    protocol(Protocol::UDP), port(udpSocket->GetLocalPort()), type(CandidateType::HOST)

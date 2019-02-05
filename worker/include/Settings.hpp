@@ -33,6 +33,7 @@ public:
 		std::string rtcIPv4;
 		std::string rtcIPv6;
 		std::string rtcAnnouncedIPv4;
+		std::string rtcAnnouncedLocalIPv4;
 		std::string rtcAnnouncedIPv6;
 		uint16_t rtcMinPort{ 10000 };
 		uint16_t rtcMaxPort{ 59999 };
@@ -42,6 +43,7 @@ public:
 		bool hasIPv4{ false };
 		bool hasIPv6{ false };
 		bool hasAnnouncedIPv4{ false };
+		bool hasAnnouncedLocalIPv4{ false };
 		bool hasAnnouncedIPv6{ false };
 	};
 

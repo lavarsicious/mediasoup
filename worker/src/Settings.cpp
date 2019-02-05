@@ -64,6 +64,7 @@ void Settings::SetConfiguration(int argc, char* argv[])
 		{ "rtcIPv4",             optional_argument, nullptr, '4' },
 		{ "rtcIPv6",             optional_argument, nullptr, '6' },
 		{ "rtcAnnouncedIPv4",    optional_argument, nullptr, '5' },
+		{ "rtcAnnouncedLocalIPv4", optional_argument, nullptr, 'z' },
 		{ "rtcAnnouncedIPv6",    optional_argument, nullptr, '7' },
 		{ "rtcMinPort",          optional_argument, nullptr, 'm' },
 		{ "rtcMaxPort",          optional_argument, nullptr, 'M' },
@@ -120,6 +121,15 @@ void Settings::SetConfiguration(int argc, char* argv[])
 				stringValue                              = std::string(optarg);
 				Settings::configuration.rtcAnnouncedIPv4 = stringValue;
 				Settings::configuration.hasAnnouncedIPv4 = true;
+
+				break;
+			}
+
+			case 'z':
+			{
+				stringValue                                   = std::string(optarg);
+				Settings::configuration.rtcAnnouncedLocalIPv4 = stringValue;
+				Settings::configuration.hasAnnouncedLocalIPv4 = true;
 
 				break;
 			}
@@ -201,6 +211,8 @@ void Settings::SetConfiguration(int argc, char* argv[])
 	{
 		Settings::configuration.rtcAnnouncedIPv4 = "";
 		Settings::configuration.hasAnnouncedIPv4 = false;
+		Settings::configuration.rtcAnnouncedLocalIPv4 = "";
+		Settings::configuration.hasAnnouncedLocalIPv4 = false;
 	}
 	if (!Settings::configuration.hasIPv6)
 	{
@@ -279,6 +291,15 @@ void Settings::PrintConfiguration()
 	else
 	{
 		MS_DEBUG_TAG(info, "  rtcAnnouncedIPv4    : (unset)");
+	}
+	if (Settings::configuration.hasAnnouncedLocalIPv4)
+	{
+		MS_DEBUG_TAG(
+		  info, "  rtcAnnouncedLocalIPv4    : \"%s\"", Settings::configuration.rtcAnnouncedLocalIPv4.c_str());
+	}
+	else
+	{
+		MS_DEBUG_TAG(info, "  rtcAnnouncedLocalIPv4    : (unset)");
 	}
 	if (Settings::configuration.hasAnnouncedIPv6)
 	{
