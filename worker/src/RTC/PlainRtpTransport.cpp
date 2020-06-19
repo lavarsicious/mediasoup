@@ -214,7 +214,7 @@ namespace RTC
 		if (localIP.empty())
 			this->udpSocket = new RTC::UdpSocket(this, addressFamily);
 		else
-			this->udpSocket = new RTC::UdpSocket(this, localIP);
+			this->udpSocket = new RTC::UdpSocket(this, addressFamily, localIP);
 	}
 
 	bool PlainRtpTransport::IsConnected() const

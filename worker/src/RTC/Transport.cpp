@@ -96,7 +96,7 @@ namespace RTC
 				if (options.localIP.empty())
 					this->mirrorSocket = new RTC::UdpSocket(this, AF_INET);
 				else
-					this->mirrorSocket = new RTC::UdpSocket(this, options.localIP);
+					this->mirrorSocket = new RTC::UdpSocket(this, AF_INET, options.localIP);
 
 				break;
 			}
@@ -116,7 +116,7 @@ namespace RTC
 				if (options.localIP.empty())
 					this->mirrorSocket = new RTC::UdpSocket(this, AF_INET6);
 				else
-					this->mirrorSocket = new RTC::UdpSocket(this, options.localIP);
+					this->mirrorSocket = new RTC::UdpSocket(this, AF_INET6, options.localIP);
 
 				break;
 			}

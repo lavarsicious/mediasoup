@@ -27,6 +27,7 @@ namespace RTC
 
 	private:
 		static uv_udp_t* GetRandomPort(int addressFamily);
+		static uv_udp_t* GetRandomPort(int addressFamily, const char* listenIp);
 
 	private:
 		static struct sockaddr_storage sockaddrStorageIPv4;
@@ -38,7 +39,7 @@ namespace RTC
 
 	public:
 		UdpSocket(Listener* listener, int addressFamily);
-		UdpSocket(Listener* listener, const std::string& ip);
+		UdpSocket(Listener* listener, int addressFamily, const std::string& ip);
 		~UdpSocket() override;
 
 		/* Pure virtual methods inherited from ::UdpSocket. */

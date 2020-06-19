@@ -75,6 +75,29 @@ namespace RTC
 
 	uv_udp_t* UdpSocket::GetRandomPort(int addressFamily)
 	{
+		switch (addressFamily)
+		{
+			case AF_INET:
+			{
+				return UdpSocket::GetRandomPort(addressFamily, Settings::configuration.rtcIPv4.c_str());
+			}
+
+			case AF_INET6:
+			{
+				return UdpSocket::GetRandomPort(addressFamily, Settings::configuration.rtcIPv6.c_str());
+			}
+
+			default:
+			{
+				MS_THROW_ERROR("invalid address family given");
+			}
+		}
+
+	}
+
+
+	uv_udp_t* UdpSocket::GetRandomPort(int addressFamily, const char* listenIp)
+	{
 		MS_TRACE();
 
 		if (addressFamily == AF_INET && !Settings::configuration.hasIPv4)
@@ -85,7 +108,6 @@ namespace RTC
 		int err;
 		uv_udp_t* uvHandle{ nullptr };
 		struct sockaddr_storage bindAddr;
-		const char* listenIp;
 		uint16_t initialPort;
 		uint16_t iteratingPort;
 		uint16_t attempt{ 0 };
@@ -98,23 +120,30 @@ namespace RTC
 			case AF_INET:
 			{
 				availablePorts = &RTC::UdpSocket::availableIPv4Ports;
-				bindAddr       = RTC::UdpSocket::sockaddrStorageIPv4;
-				listenIp       = Settings::configuration.rtcIPv4.c_str();
+				err = uv_ip4_addr(
+					listenIp,
+					0,
+					reinterpret_cast<struct sockaddr_in*>(&bindAddr));
 
+				if (err != 0)
+					MS_THROW_ERROR("uv_ipv4_addr() failed: %s", uv_strerror(err));
 				break;
 			}
-
 			case AF_INET6:
 			{
 				availablePorts = &RTC::UdpSocket::availableIPv6Ports;
-				bindAddr       = RTC::UdpSocket::sockaddrStorageIPv6;
-				listenIp       = Settings::configuration.rtcIPv6.c_str();
+				err = uv_ip6_addr(
+					listenIp,
+					0,
+					reinterpret_cast<struct sockaddr_in6*>(&bindAddr));
+
+				if (err != 0)
+					MS_THROW_ERROR("uv_ipv6_addr() failed: %s", uv_strerror(err));
+
 				// Don't also bind into IPv4 when listening in IPv6.
 				flags |= UV_UDP_IPV6ONLY;
-
 				break;
 			}
-
 			default:
 			{
 				MS_THROW_ERROR("invalid address family given");
@@ -227,10 +256,11 @@ namespace RTC
 		MS_TRACE();
 	}
 
-	UdpSocket::UdpSocket(Listener* listener, const std::string& ip)
-	  : // Provide the parent class constructor with an IP and port 0.
-	    // NOTE: This may throw a MediaSoupError exception if the given IP is invalid.
-	    ::UdpSocket::UdpSocket(ip, 0), listener(listener)
+	UdpSocket::UdpSocket(Listener* listener, int addressFamily, const std::string& ip)
+	  : // Provide the parent class constructor with a UDP uv handle.
+	    // NOTE: This may throw a MediaSoupError exception if the address family is not available
+	    // or there are no available ports.
+	    ::UdpSocket::UdpSocket(UdpSocket::GetRandomPort(addressFamily, ip.c_str())), listener(listener)
 	{
 		MS_TRACE();
 	}
