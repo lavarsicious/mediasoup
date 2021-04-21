@@ -16,9 +16,9 @@ namespace Channel
 {
 	/* Static. */
 
-	// netstring length for a 65536 bytes payload.
-	static constexpr size_t MaxSize{ 65543 };
-	static constexpr size_t MessageMaxSize{ 65536 };
+	// netstring length for a 4194304 bytes payload.
+	static constexpr size_t MaxSize{ 4194304 };
+	static constexpr size_t MessageMaxSize{ 4194313 };
 	static uint8_t WriteBuffer[MaxSize];
 
 	/* Instance methods. */
